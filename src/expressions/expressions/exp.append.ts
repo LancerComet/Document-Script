@@ -1,3 +1,9 @@
+/*
+ * Expression: append.
+ * By LancerComet at 23:58, 2016.11.26.
+ * # Carry Your World #
+ */
+
 /// <reference path="../../index.d.ts" />
 
 import { isKeyword } from '../../parser'
