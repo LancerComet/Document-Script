@@ -1,0 +1,19 @@
+{
+  "name": "document-script",
+  "version": "0.1.0",
+  "description": "Script for handling dom element.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc src/index.ts --output build/document-script.js --watch",
+    "build": "tsc src/index.ts --output build/document-script.js"
+  },
+  "keywords": ["script", "language", "document", "typescript"],
+  "author": {
+    "name": "LancerComet",
+    "email": "chw644@hotmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^2.0.10"
+  }
+}
