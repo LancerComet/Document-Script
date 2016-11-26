@@ -1,6 +1,5 @@
 /// <reference path="./class.Keyword.d.ts" />
 
-
 import { Literal } from './class.Literal'
 
 /**
