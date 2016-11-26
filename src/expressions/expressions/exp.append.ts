@@ -20,38 +20,43 @@ const EXP_NAME = 'append'
  */
 export function append (currentToken: Token, tokens: Array<Token>) {
   const appendExpression = new Expression(EXP_NAME)
-  const srcElementArg = tokens.shift()
 
   // Let's deal with the first arg.
   // "append" must be followed by a element variable, a keyword and a element variable again.
   // Element variable should be a string or number, cannot be a keyword or expression.
   // Keyword is a keyword.
-  if (!isKeyword(srcElementArg.value) && EXPRESSION_LIST.indexOf(srcElementArg.value) < 0) {
-    appendExpression.insertArg(
-      srcElementArg.type === 'number'
-        ? new NumberLiteral(<number> srcElementArg.value)
-        : new StringLiteral(<string> srcElementArg.value)
-    )
-  } else {
-    errorHandler.typeError('You can\'t use a keyword or expression as the name of source element when calling "append".')
-  }
+  const srcElementArg = tokens.shift()
+  elementExec(srcElementArg, appendExpression, 'source')
 
-  // Keyword.
+  // Then Keyword.
   const keywordArg = tokens.shift()
   isKeyword(keywordArg.value)
     ? appendExpression.insertArg(new Keyword(keywordArg.value))
     : errorHandler.typeError('A keyword must be followed after srouce element when using "append".')
 
-  // Target element.
+  // Target element at last.
   const targetElementArg = tokens.shift()
-  if (!isKeyword(targetElementArg.value) && EXPRESSION_LIST.indexOf(srcElementArg.value) < 0) {
+  elementExec(targetElementArg, appendExpression, 'target')
+
+  // Done! :)
+}
+
+
+/**
+ * Code for dealing with element argument token.
+ * 
+ * @param {Token} elementArg
+ * @param {Expression} appendExpression
+ * @param {string} type
+ */
+function elementExec (elementArg: Token, appendExpression: Expression, type: string) {
+  if (!isKeyword(elementArg.value) && EXPRESSION_LIST.indexOf(elementArg.value) < 0) {
     appendExpression.insertArg(
-      targetElementArg.type === 'number'
-        ? new NumberLiteral(<number> targetElementArg.value)
-        : new StringLiteral(<string> targetElementArg.value)
+      elementArg.type === 'number'
+        ? new NumberLiteral(<number> elementArg.value)
+        : new StringLiteral(<string> elementArg.value)
     )
   } else {
-    errorHandler.typeError('You can\'t use a keyword or expression as the name of target element when calling "append".')    
+    errorHandler.typeError(`You can't use a keyword or expression as the name of ${type} element when calling "append".`)
   }
-
 }
