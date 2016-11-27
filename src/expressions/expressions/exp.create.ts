@@ -8,6 +8,7 @@
 
 import { isKeyword } from '../../parser'
 import { EXPRESSION_LIST } from '../'
+import { NumberLiteral, StringLiteral } from '../../parser'
 
 import { errorHandler } from '../../utils'
 
@@ -55,4 +56,6 @@ export function create (currentToken: Token, tokens: Array<Token>) {
   } else {
     errorHandler.typeError('You can\'t use a keyword or expression as a variable when calling "create".')
   }
+
+  // EOF.
 }

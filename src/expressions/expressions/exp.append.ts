@@ -36,7 +36,7 @@ export function append (currentToken: Token, tokens: Array<Token>) {
 
   // Then Keyword.
   const keywordArg = tokens.shift()
-  isKeyword(keywordArg.value)
+  keywordArg.value === 'to'
     ? appendExpression.insertArg(new Keyword(keywordArg.value))
     : errorHandler.typeError('A keyword must be followed after srouce element when using "append".')
 
