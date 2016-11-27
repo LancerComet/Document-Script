@@ -18,6 +18,9 @@ const EXP_NAME = 'select'
  * Expression: select.
  * This function will be called in parser. 
  * 
+ * @example
+ *  select #my-div as myDiv
+ * 
  * @export
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
