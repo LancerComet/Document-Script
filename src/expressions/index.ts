@@ -5,6 +5,8 @@ import { remove } from './expressions/exp.remove'
 import { select } from './expressions/exp.select'
 import { style } from './expressions/exp.style'
 
+import { Expression } from './class.Expression'
+
 /**
  * Expressions in document script.
  * @type {Array<string>}
@@ -22,3 +24,5 @@ export const EXPRESSION_LIST = [
 export const expressions = {
   append, create, each, remove, select, style
 }
+
+export { Expression }

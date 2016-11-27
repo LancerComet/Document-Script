@@ -6,8 +6,8 @@
  * # Carry Your World #
  */
 
-import { isKeyword } from '../../parser'
-import { EXPRESSION_LIST } from '../'
+import { Keyword, isKeyword } from '../../parser'
+import { Expression, EXPRESSION_LIST } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
 
 import { errorHandler } from '../../utils'
@@ -24,8 +24,9 @@ const EXP_NAME = 'select'
  * @export
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
+ * @param {AST} ast
  */
-export function select (currentToken: Token, tokens: Array<Token>) {
+export function select (currentToken: Token, tokens: Array<Token>, ast: AST) {
 const selectExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -53,6 +54,8 @@ const selectExpression = new Expression(EXP_NAME)
   } else {
     errorHandler.typeError(`You can't use a keyword or expression as a variable when calling "${EXP_NAME}".`)
   }
+
+  ast.insertExpression(selectExpression)
 
   // EOF.
 }

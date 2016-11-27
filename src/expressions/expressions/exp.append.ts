@@ -1,13 +1,13 @@
+/// <reference path="../../index.d.ts" />
+
 /*
  * Expression: append.
  * By LancerComet at 23:58, 2016.11.26.
  * # Carry Your World #
  */
 
-/// <reference path="../../index.d.ts" />
-
-import { isKeyword } from '../../parser'
-import { EXPRESSION_LIST } from '../'
+import { Keyword, isKeyword } from '../../parser'
+import { Expression, EXPRESSION_LIST } from '../'
 
 import { errorHandler } from '../../utils'
 
@@ -23,8 +23,9 @@ const EXP_NAME = 'append'
  * @export
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
+ * @param {AST} ast
  */
-export function append (currentToken: Token, tokens: Array<Token>) {
+export function append (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const appendExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -43,6 +44,8 @@ export function append (currentToken: Token, tokens: Array<Token>) {
   // Target element at last.
   const targetElementArg = tokens.shift()
   elementExec(targetElementArg, appendExpression, 'target')
+
+  ast.insertExpression(appendExpression)
 
   // Done! :)
 }

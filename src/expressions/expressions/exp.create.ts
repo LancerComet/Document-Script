@@ -1,13 +1,13 @@
+/// <reference path="../../index.d.ts" />
+
 /*
  * Expression: append.
  * By LancerComet at 0:04, 2016.11.27.
  * # Carry Your World #
  */
 
-/// <reference path="../../index.d.ts" />
-
-import { isKeyword } from '../../parser'
-import { EXPRESSION_LIST } from '../'
+import { Keyword, isKeyword } from '../../parser'
+import { Expression, EXPRESSION_LIST } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
 
 import { errorHandler } from '../../utils'
@@ -25,8 +25,9 @@ const EXP_NAME = 'create'
  * @export
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
+ * @param {AST} ast 
  */
-export function create (currentToken: Token, tokens: Array<Token>) {
+export function create (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const createExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -57,5 +58,7 @@ export function create (currentToken: Token, tokens: Array<Token>) {
     errorHandler.typeError(`You can't use a keyword or expression as a variable when calling "${EXP_NAME}".`)
   }
 
+  ast.insertExpression(createExpression)
+  
   // EOF.
 }

@@ -1,13 +1,13 @@
+/// <reference path="../../index.d.ts" />
+
 /*
  * Expression: each.
  * By LancerComet at 13:21, 2016.11.27.
  * # Carry Your World #
  */
 
-/// <reference path="../../index.d.ts" />
-
-import { isKeyword } from '../../parser'
-import { EXPRESSION_LIST } from '../'
+import { Keyword, isKeyword } from '../../parser'
+import { Expression, EXPRESSION_LIST } from '../'
 import { NumberLiteral, StringLiteral, ExpressionLiteral } from '../../parser'
 
 import { errorHandler } from '../../utils'

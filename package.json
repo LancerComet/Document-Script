@@ -4,16 +4,28 @@
   "description": "Script for handling dom element.",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc src/index.ts --output build/document-script.js --watch",
-    "build": "tsc src/index.ts --output build/document-script.js"
+    "dev": "tsc src/index.ts --outFile build/document-script.js --watch",
+    "build": "tsc src/index.ts --outFile build/document-script.js",
+    "test:build": "gulp test:build"
   },
-  "keywords": ["script", "language", "document", "typescript"],
+  "keywords": [
+    "script",
+    "language",
+    "document",
+    "typescript"
+  ],
   "author": {
     "name": "LancerComet",
     "email": "chw644@hotmail.com"
   },
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^2.0.10"
+    "browserify": "^13.1.1",
+    "envify": "^4.0.0",
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.7",
+    "tsify": "^2.0.3",
+    "typescript": "^2.0.10",
+    "watchify": "^3.7.0"
   }
 }

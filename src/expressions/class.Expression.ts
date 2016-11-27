@@ -1,19 +1,13 @@
-/// <reference path="./class.Literal.d.ts" />
-
+/// <reference path="../index.d.ts" />
 
 /**
  * Expression of document script.
  * 
+ * @export
  * @class Expression
  */
-declare class Expression {
-  /**
-   * Type always be 'CallExpression'.
-   * 
-   * @type {string}
-   * @memberOf Expression
-   */
-  type: string
+export class Expression {
+  type: string = 'CallExpression'
 
   /**
    * The name of this expression.
@@ -31,8 +25,8 @@ declare class Expression {
    * @type {(Array<Literal | Keyword>)} 
    * @memberOf Expression
    */
-  arguments: Array<Literal | Keyword>
-
+  arguments: Array<Literal | Keyword> = []
+  
   /**
    * Creates an instance of Expression.
    * 
@@ -40,7 +34,9 @@ declare class Expression {
    * 
    * @memberOf Expression
    */
-  constructor (name: string)
+  constructor (name: string) {
+    this.name = name
+  }
 
   /**
    * Insert an new argument into this expression.
@@ -49,5 +45,7 @@ declare class Expression {
    * 
    * @memberOf Expression
    */
-  insertArg (argument: Literal | Keyword)
+  insertArg (argument: Literal | Keyword) {
+    this.arguments.push(argument)
+  }
 }

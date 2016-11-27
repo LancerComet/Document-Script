@@ -1,4 +1,4 @@
-import { Expression } from './class.Expression'
+/// <reference path="../index.d.ts" />
 
 /**
  * Abstract Syntax Tree.

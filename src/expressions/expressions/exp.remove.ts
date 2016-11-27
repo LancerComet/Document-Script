@@ -6,8 +6,8 @@
  * # Carry Your World #
  */
 
-import { isKeyword } from '../../parser'
-import { EXPRESSION_LIST } from '../'
+import { Keyword, isKeyword } from '../../parser'
+import { Expression, EXPRESSION_LIST } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
 
 import { errorHandler } from '../../utils'
@@ -24,8 +24,9 @@ const EXP_NAME = 'remove'
  * @export
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
+ * @param {AST} ast
  */
-export function remove (currentToken: Token, tokens: Array<Token>) {
+export function remove (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const removeExpression = new Expression(EXP_NAME)
 
   // Only one argument.
@@ -40,5 +41,6 @@ export function remove (currentToken: Token, tokens: Array<Token>) {
   } else {
     errorHandler.typeError(`You can't use a keyword or expression as a variable when calling "${EXP_NAME}".`)
   }
- 
+
+  ast.insertExpression(removeExpression)
 }
