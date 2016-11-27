@@ -42,7 +42,7 @@ export function create (currentToken: Token, tokens: Array<Token>) {
   const asArg = tokens.shift()
   asArg.value === 'as'
     ? createExpression.insertArg(new Keyword(asArg.value))
-    : errorHandler.typeError('A keyword "as" must be provided after HTML tag name in "create" expression.')
+    : errorHandler.typeError(`A keyword "as" must be provided after HTML tag name in "${EXP_NAME}" expression.`)
 
   // Last one.
   // The element variable, can be anything expect keyword and Expression.
@@ -54,7 +54,7 @@ export function create (currentToken: Token, tokens: Array<Token>) {
         : new StringLiteral(<string> elementVariableArg.value)
     )
   } else {
-    errorHandler.typeError('You can\'t use a keyword or expression as a variable when calling "create".')
+    errorHandler.typeError(`You can't use a keyword or expression as a variable when calling "${EXP_NAME}".`)
   }
 
   // EOF.
