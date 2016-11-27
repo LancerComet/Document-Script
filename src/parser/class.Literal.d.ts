@@ -61,3 +61,23 @@ declare class StringLiteral extends Literal {
    */
   constructor (value: string)  
 }
+
+/**
+ * ExpressionLiteral.
+ * This is a expression that is stored as the literal. 
+ * 
+ * @export
+ * @class ExpressionLiteral
+ * @extends {Literal}
+ */
+declare class ExpressionLiteral extends Literal {
+  
+  /**
+   * Creates an instance of ExpressionLiteral.
+   * 
+   * @param {string} value
+   * 
+   * @memberOf ExpressionLiteral
+   */
+  constructor (value: string) 
+}

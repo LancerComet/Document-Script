@@ -76,3 +76,25 @@ export class StringLiteral extends Literal {
     super('StringLiteral', value)
   }
 }
+
+/**
+ * ExpressionLiteral.
+ * This is a expression that is stored as the literal. 
+ * 
+ * @export
+ * @class ExpressionLiteral
+ * @extends {Literal}
+ */
+export class ExpressionLiteral extends Literal {
+  
+  /**
+   * Creates an instance of ExpressionLiteral.
+   * 
+   * @param {string} value
+   * 
+   * @memberOf ExpressionLiteral
+   */
+  constructor (value: string) {
+    super('expression', value)
+  }
+}

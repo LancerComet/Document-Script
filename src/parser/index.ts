@@ -3,7 +3,7 @@
 import { AST } from './class.AST'
 import { Expression } from './class.Expression'
 import { Keyword, isKeyword } from './class.Keyword'
-import { Literal, NumberLiteral, StringLiteral } from './class.Literal'
+import { Literal, NumberLiteral, StringLiteral, ExpressionLiteral } from './class.Literal'
 
 import { expressions } from '../expressions'
 
@@ -34,5 +34,5 @@ export {
   AST,
   Expression,
   Keyword, isKeyword,
-  Literal, NumberLiteral, StringLiteral
+  Literal, NumberLiteral, StringLiteral, ExpressionLiteral
 }
