@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DocumentScript.</title>
+    <style>
+      body {
+        font-family: "Microsoft Sans Serif";
+      }
+
+      h2 {
+        font-weight: 100;
+      }
+
+      code {
+        display: inline-block;
+        width: 300px;
+        padding: 10px;
+        margin: 0 10px;
+        background-color: lightyellow;
+        border: 1px solid sandybrown;
+        vertical-align: top;
+      }
+
+      code p {
+        margin: 10px 0;
+        color: #ff5400;
+      }
+    </style>
+  </head>
+
+  <body>   
+    <div>
+      <h2>DocumentScript.<br/><small>Just for fun! :)</small></h2>
+      <p>Code:</p>
+      <code>
+        <p>select .append-target as target</p>
+        <p><br></p>
+        <p>create div as div1</p>
+        <p>style div1 width 100px</p>
+        <p>style div1 height 100px</p>
+        <p>style div1 backgroundColor cadetblue</p>
+        <p>style div1 display inline-block</p>
+        <p><br></p>
+        <p>create div as div2</p>
+        <p>style div2 width 100px</p>
+        <p>style div2 height 200px</p>
+        <p>style div2 backgroundColor darkorange</p>
+        <p>style div2 display inline-block</p>
+        <p><br></p>
+        <p>append div1 to target</p>        
+        <p>append div2 to target</p>
+      </code>
+      <div class="append-target" style="display: inline-block"></div>      
+    </div>
+
+    <script lang="DocumentScript" type="text/plain">
+      select .append-target as target
+    
+      create div as div1
+      style div1 width 100px
+      style div1 height 100px
+      style div1 backgroundColor cadetblue
+      style div1 display inline-block      
+
+      create div as div2
+      style div2 width 100px
+      style div2 height 200px
+      style div2 backgroundColor darkorange
+      style div2 display inline-block
+
+      append div1 to target
+      append div2 to target            
+    </script>
+    <script src="./demo.js"></script>
+  </body>
+</html>

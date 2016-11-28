@@ -5,12 +5,14 @@ const gulpUtil = require('gulp-util')
 
 const browserify = require('browserify')
 const envify = require('envify/custom')
+const minifyify = require('minifyify')
 const tsify = require('tsify')
 const watchify = require("watchify")
 
 const ENTRY = {
   src: './src/index.ts',
-  test: './test/test.ts'
+  test: './test/test.ts',
+  demo: './demo/demo.ts'
 }
 const TSCONFIG = require('./tsconfig.json')
 const ENV = {
@@ -19,6 +21,31 @@ const ENV = {
 }
 
 gulp.task('default', [])
+
+gulp.task('build', () => {
+  
+})
+
+gulp.task('build:demo', () => {
+  const bundler = browserify({ debug: true })
+    .add(ENTRY.demo)
+    .plugin(tsify, TSCONFIG.compilerOptions)
+    .transform(envify(ENV.dev))
+    .plugin(minifyify)    
+    .on('update', bundle)
+    .on('log', gulpUtil.log)
+    .on('error', error => console.error(error.toString()))
+
+  bundle()
+
+  function bundle () {
+    bundler.bundle(function () {}).pipe(fs.createWriteStream('./demo/demo.js'))
+  }
+})
+
+gulp.task('test', () => {
+
+})
 
 gulp.task('test:build', () => {
   const bundler = browserify()

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsc src/index.ts --outFile build/document-script.js --watch",
     "build": "tsc src/index.ts --outFile build/document-script.js",
+    "build:demo": "gulp build:demo",    
     "test:build": "gulp test:build"
   },
   "keywords": [
@@ -24,6 +25,7 @@
     "envify": "^4.0.0",
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.7",
+    "minifyify": "^7.3.4",
     "tsify": "^2.0.3",
     "typescript": "^2.0.10",
     "watchify": "^3.7.0"
