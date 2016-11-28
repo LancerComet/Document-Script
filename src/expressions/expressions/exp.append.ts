@@ -14,7 +14,7 @@ import { errorHandler } from '../../utils'
 const EXP_NAME = 'append'
 
 /**
- * Expression: append.
+ * createExpression: append.
  * This function will be called in parser. 
  * 
  * @example
@@ -25,7 +25,7 @@ const EXP_NAME = 'append'
  * @param {Array<Token>} tokens
  * @param {AST} ast
  */
-export function append (currentToken: Token, tokens: Array<Token>, ast: AST) {
+export function createExpression (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const appendExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -68,4 +68,8 @@ function elementExec (elementArg: Token, appendExpression: Expression, type: str
   } else {
     errorHandler.typeError(`You can't use a keyword or expression as the name of ${type} element when calling "append".`)
   }
+}
+
+export function run () {
+
 }

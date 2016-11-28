@@ -15,7 +15,7 @@ import { errorHandler } from '../../utils'
 const EXP_NAME = 'each'
 
 /**
- * Expression: each.
+ * createExpression: each.
  * This function will be called in parser.
  * 
  * @example
@@ -26,7 +26,7 @@ const EXP_NAME = 'each'
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
  */
-export function each (currentToken: Token, tokens: Array<Token>) {
+export function createExpression (currentToken: Token, tokens: Array<Token>) {
   const eachExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -59,4 +59,8 @@ export function each (currentToken: Token, tokens: Array<Token>) {
     arg.type === 'number' ? new NumberLiteral(arg.value) : new StringLiteral(arg.value)
   ))
 
+}
+
+export function run () {
+  
 }

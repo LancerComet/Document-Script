@@ -15,11 +15,22 @@ exports.Expression = Expression;
 
 },{}],2:[function(require,module,exports){
 "use strict";
+var Variable = (function () {
+    function Variable(name, value) {
+        this.name = name;
+        this.value = value;
+    }
+    return Variable;
+}());
+exports.Variable = Variable;
+
+},{}],3:[function(require,module,exports){
+"use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'append';
-function append(currentToken, tokens, ast) {
+function createExpression(currentToken, tokens, ast) {
     var appendExpression = new _1.Expression(EXP_NAME);
     var srcElementArg = tokens.shift();
     elementExec(srcElementArg, appendExpression, 'source');
@@ -31,7 +42,7 @@ function append(currentToken, tokens, ast) {
     elementExec(targetElementArg, appendExpression, 'target');
     ast.insertExpression(appendExpression);
 }
-exports.append = append;
+exports.createExpression = createExpression;
 function elementExec(elementArg, appendExpression, type) {
     if (!parser_1.isKeyword(elementArg.value) && _1.EXPRESSION_LIST.indexOf(elementArg.value) < 0) {
         appendExpression.insertArg(elementArg.type === 'number'
@@ -42,15 +53,19 @@ function elementExec(elementArg, appendExpression, type) {
         utils_1.errorHandler.typeError("You can't use a keyword or expression as the name of " + type + " element when calling \"append\".");
     }
 }
+function run() {
+}
+exports.run = run;
 
-},{"../":8,"../../parser":12,"../../utils":16}],3:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../utils":18}],4:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
+var transformer_1 = require('../../transformer');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'create';
-function create(currentToken, tokens, ast) {
+function createExpression(currentToken, tokens, ast) {
     var createExpression = new _1.Expression(EXP_NAME);
     var tagNameArg = tokens.shift();
     tagNameArg.type === 'word'
@@ -71,16 +86,30 @@ function create(currentToken, tokens, ast) {
     }
     ast.insertExpression(createExpression);
 }
-exports.create = create;
+exports.createExpression = createExpression;
+function run(expression) {
+    var tagName = expression.arguments.shift();
+    if (tagName.type !== 'StringLiteral' || typeof tagName.value !== 'string') {
+        utils_1.errorHandler.typeError('You must use a string as your tag name.');
+    }
+    var asKeyword = expression.arguments.shift();
+    if (asKeyword.type !== 'keyword' || asKeyword.value !== 'as') {
+        utils_1.errorHandler.syntaxError('"as" must be followed after "${tagName}" in "create" expression.');
+    }
+    var variable = expression.arguments.shift();
+    var value = document.createElement(tagName.value);
+    transformer_1.VARIABLE_HASH[variable.value] = new _1.Variable(variable.value, value);
+}
+exports.run = run;
 
-},{"../":8,"../../parser":12,"../../utils":16}],4:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../transformer":16,"../../utils":18}],5:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'each';
-function each(currentToken, tokens) {
+function createExpression(currentToken, tokens) {
     var eachExpression = new _1.Expression(EXP_NAME);
     var elementsArg = tokens.shift();
     if (!parser_1.isKeyword(elementsArg.value) && _1.EXPRESSION_LIST.indexOf(elementsArg.value) < 0) {
@@ -101,16 +130,19 @@ function each(currentToken, tokens) {
     var args = [tokens.shift(), tokens.shift()];
     args.forEach(function (arg) { return eachExpression.insertArg(arg.type === 'number' ? new parser_2.NumberLiteral(arg.value) : new parser_2.StringLiteral(arg.value)); });
 }
-exports.each = each;
+exports.createExpression = createExpression;
+function run() {
+}
+exports.run = run;
 
-},{"../":8,"../../parser":12,"../../utils":16}],5:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../utils":18}],6:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'remove';
-function remove(currentToken, tokens, ast) {
+function createExpression(currentToken, tokens, ast) {
     var removeExpression = new _1.Expression(EXP_NAME);
     var elementVariableArg = tokens.shift();
     if (!parser_1.isKeyword(elementVariableArg.value) && _1.EXPRESSION_LIST.indexOf(elementVariableArg.value) < 0) {
@@ -123,16 +155,19 @@ function remove(currentToken, tokens, ast) {
     }
     ast.insertExpression(removeExpression);
 }
-exports.remove = remove;
+exports.createExpression = createExpression;
+function run() {
+}
+exports.run = run;
 
-},{"../":8,"../../parser":12,"../../utils":16}],6:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../utils":18}],7:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'select';
-function select(currentToken, tokens, ast) {
+function createExpression(currentToken, tokens, ast) {
     var selectExpression = new _1.Expression(EXP_NAME);
     var selectorArg = tokens.shift();
     selectExpression.insertArg(new parser_2.StringLiteral(selectorArg.value.toString()));
@@ -151,16 +186,19 @@ function select(currentToken, tokens, ast) {
     }
     ast.insertExpression(selectExpression);
 }
-exports.select = select;
+exports.createExpression = createExpression;
+function run() {
+}
+exports.run = run;
 
-},{"../":8,"../../parser":12,"../../utils":16}],7:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../utils":18}],8:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'style';
-function style(currentToken, tokens, ast) {
+function createExpression(currentToken, tokens, ast) {
     var styleExpression = new _1.Expression(EXP_NAME);
     var elementVariableArg = tokens.shift();
     if (!parser_1.isKeyword(elementVariableArg.value) && _1.EXPRESSION_LIST.indexOf(elementVariableArg.value) < 0) {
@@ -179,26 +217,34 @@ function style(currentToken, tokens, ast) {
     styleExpression.insertArg(new parser_2.StringLiteral(styleValueArg.value));
     ast.insertExpression(styleExpression);
 }
-exports.style = style;
+exports.createExpression = createExpression;
+function run() {
+}
+exports.run = run;
 
-},{"../":8,"../../parser":12,"../../utils":16}],8:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../utils":18}],9:[function(require,module,exports){
 "use strict";
-var exp_append_1 = require('./expressions/exp.append');
-var exp_create_1 = require('./expressions/exp.create');
-var exp_each_1 = require('./expressions/exp.each');
-var exp_remove_1 = require('./expressions/exp.remove');
-var exp_select_1 = require('./expressions/exp.select');
-var exp_style_1 = require('./expressions/exp.style');
+var append = require('./expressions/exp.append');
+exports.append = append;
+var create = require('./expressions/exp.create');
+exports.create = create;
+var each = require('./expressions/exp.each');
+exports.each = each;
+var remove = require('./expressions/exp.remove');
+exports.remove = remove;
+var select = require('./expressions/exp.select');
+exports.select = select;
+var style = require('./expressions/exp.style');
+exports.style = style;
 var class_Expression_1 = require('./class.Expression');
 exports.Expression = class_Expression_1.Expression;
+var class_Variable_1 = require('./class.Variable');
+exports.Variable = class_Variable_1.Variable;
 exports.EXPRESSION_LIST = [
     'append', 'create', 'each', 'remove', 'select', 'style'
 ];
-exports.expressions = {
-    append: exp_append_1.append, create: exp_create_1.create, each: exp_each_1.each, remove: exp_remove_1.remove, select: exp_select_1.select, style: exp_style_1.style
-};
 
-},{"./class.Expression":1,"./expressions/exp.append":2,"./expressions/exp.create":3,"./expressions/exp.each":4,"./expressions/exp.remove":5,"./expressions/exp.select":6,"./expressions/exp.style":7}],9:[function(require,module,exports){
+},{"./class.Expression":1,"./class.Variable":2,"./expressions/exp.append":3,"./expressions/exp.create":4,"./expressions/exp.each":5,"./expressions/exp.remove":6,"./expressions/exp.select":7,"./expressions/exp.style":8}],10:[function(require,module,exports){
 "use strict";
 var AST = (function () {
     function AST(type, body) {
@@ -214,7 +260,7 @@ var AST = (function () {
 }());
 exports.AST = AST;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 var KEYWORD_LIST = [
     'as', 'to', 'from'
@@ -232,7 +278,7 @@ function isKeyword(target) {
 }
 exports.isKeyword = isKeyword;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -272,7 +318,7 @@ var ExpressionLiteral = (function (_super) {
 }(Literal));
 exports.ExpressionLiteral = ExpressionLiteral;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 var class_AST_1 = require('./class.AST');
 exports.AST = class_AST_1.AST;
@@ -284,7 +330,7 @@ exports.Literal = class_Literal_1.Literal;
 exports.NumberLiteral = class_Literal_1.NumberLiteral;
 exports.StringLiteral = class_Literal_1.StringLiteral;
 exports.ExpressionLiteral = class_Literal_1.ExpressionLiteral;
-var expressions_1 = require('../expressions');
+var expressions = require('../expressions');
 function parser(tokens) {
     if (tokens === void 0) { tokens = []; }
     if (!tokens.length) {
@@ -295,14 +341,14 @@ function parser(tokens) {
         var currentToken = tokens.shift();
         if (currentToken.type === 'word') {
             var tokenValue = currentToken.value;
-            expressions_1.expressions[tokenValue] && expressions_1.expressions[tokenValue](currentToken, tokens, ast);
+            expressions[tokenValue] && expressions[tokenValue].createExpression(currentToken, tokens, ast);
         }
     }
     return ast;
 }
 exports.parser = parser;
 
-},{"../expressions":8,"./class.AST":9,"./class.Keyword":10,"./class.Literal":11}],13:[function(require,module,exports){
+},{"../expressions":9,"./class.AST":10,"./class.Keyword":11,"./class.Literal":12}],14:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -335,7 +381,7 @@ var WordToken = (function (_super) {
 }(Token));
 exports.WordToken = WordToken;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 var class_Token_1 = require('./class.Token');
 exports.Token = class_Token_1.Token;
@@ -350,19 +396,28 @@ function tokenizer(code) {
 }
 exports.tokenizer = tokenizer;
 
-},{"./class.Token":13}],15:[function(require,module,exports){
+},{"./class.Token":14}],16:[function(require,module,exports){
 "use strict";
-var VARIABLE_HASH = {};
+var tf_variable_hash_1 = require('./tf.variable-hash');
+exports.VARIABLE_HASH = tf_variable_hash_1.VARIABLE_HASH;
+var expressions = require('../expressions');
 function transformer(ast) {
+    ast.body.forEach(function (expression) {
+        expressions[expression.name] && expressions[expression.name].run(expression);
+    });
 }
 exports.transformer = transformer;
 
-},{}],16:[function(require,module,exports){
+},{"../expressions":9,"./tf.variable-hash":17}],17:[function(require,module,exports){
+"use strict";
+exports.VARIABLE_HASH = {};
+
+},{}],18:[function(require,module,exports){
 "use strict";
 var errorHandler = require('./util.throw-error');
 exports.errorHandler = errorHandler;
 
-},{"./util.throw-error":17}],17:[function(require,module,exports){
+},{"./util.throw-error":19}],19:[function(require,module,exports){
 "use strict";
 function throwError(message) {
     throw new Error(message);
@@ -372,8 +427,12 @@ function typeError(message) {
     throwError("[TypeError] " + message);
 }
 exports.typeError = typeError;
+function syntaxError(message) {
+    throwError('[Syntax Error] ' + message);
+}
+exports.syntaxError = syntaxError;
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 var tokenizer_1 = require('../src/tokenizer');
 var parser_1 = require('../src/parser');
@@ -382,4 +441,4 @@ window.tokenizer = tokenizer_1.tokenizer;
 window.parser = parser_1.parser;
 window.transformer = transformer_1.transformer;
 
-},{"../src/parser":12,"../src/tokenizer":14,"../src/transformer":15}]},{},[18]);
+},{"../src/parser":13,"../src/tokenizer":15,"../src/transformer":16}]},{},[20]);

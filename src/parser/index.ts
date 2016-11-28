@@ -4,7 +4,7 @@ import { AST } from './class.AST'
 import { Keyword, isKeyword } from './class.Keyword'
 import { Literal, NumberLiteral, StringLiteral, ExpressionLiteral } from './class.Literal'
 
-import { expressions } from '../expressions'
+import * as expressions from '../expressions'
 
 /**
  * Parser for document script. 
@@ -22,7 +22,7 @@ export function parser (tokens: Array<Token> = []) : false | AST {
 
     if (currentToken.type === 'word') {
       const tokenValue: string = currentToken.value
-      expressions[tokenValue] && expressions[tokenValue](currentToken, tokens, ast)
+      expressions[tokenValue] && expressions[tokenValue].createExpression(currentToken, tokens, ast)
     }
   }
 

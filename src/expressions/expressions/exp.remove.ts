@@ -15,7 +15,7 @@ import { errorHandler } from '../../utils'
 const EXP_NAME = 'remove'
 
 /**
- * Expression: remove.
+ * createExpression: remove.
  * This function will be called in parser.
  * 
  * @example
@@ -26,7 +26,7 @@ const EXP_NAME = 'remove'
  * @param {Array<Token>} tokens
  * @param {AST} ast
  */
-export function remove (currentToken: Token, tokens: Array<Token>, ast: AST) {
+export function createExpression (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const removeExpression = new Expression(EXP_NAME)
 
   // Only one argument.
@@ -43,4 +43,8 @@ export function remove (currentToken: Token, tokens: Array<Token>, ast: AST) {
   }
 
   ast.insertExpression(removeExpression)
+}
+
+export function run () {
+  
 }

@@ -15,7 +15,7 @@ import { errorHandler } from '../../utils'
 const EXP_NAME = 'style'
 
 /**
- * Expression: style.
+ * createExpression: style.
  * This function will be called in parser. 
  * 
  * @example
@@ -26,7 +26,7 @@ const EXP_NAME = 'style'
  * @param {Array<Token>} tokens
  * @param {AST} ast
  */
-export function style (currentToken: Token, tokens: Array<Token>, ast: AST) {
+export function createExpression (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const styleExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -54,4 +54,8 @@ export function style (currentToken: Token, tokens: Array<Token>, ast: AST) {
 
   ast.insertExpression(styleExpression)
   // EOF.
+}
+
+export function run () {
+  
 }

@@ -15,7 +15,7 @@ import { errorHandler } from '../../utils'
 const EXP_NAME = 'select'
 
 /**
- * Expression: select.
+ * createExpression: select.
  * This function will be called in parser. 
  * 
  * @example
@@ -26,7 +26,7 @@ const EXP_NAME = 'select'
  * @param {Array<Token>} tokens
  * @param {AST} ast
  */
-export function select (currentToken: Token, tokens: Array<Token>, ast: AST) {
+export function createExpression (currentToken: Token, tokens: Array<Token>, ast: AST) {
 const selectExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -58,4 +58,8 @@ const selectExpression = new Expression(EXP_NAME)
   ast.insertExpression(selectExpression)
 
   // EOF.
+}
+
+export function run () {
+  
 }

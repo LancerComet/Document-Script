@@ -7,15 +7,17 @@
  */
 
 import { Keyword, isKeyword } from '../../parser'
-import { Expression, EXPRESSION_LIST } from '../'
+import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
+
+import { VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
 const EXP_NAME = 'create'
 
 /**
- * Expression: create.
+ * createExpression: create.
  * This function will be called in parser. 
  * 
  * @example
@@ -27,7 +29,7 @@ const EXP_NAME = 'create'
  * @param {Array<Token>} tokens
  * @param {AST} ast 
  */
-export function create (currentToken: Token, tokens: Array<Token>, ast: AST) {
+export function createExpression (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const createExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -61,4 +63,29 @@ export function create (currentToken: Token, tokens: Array<Token>, ast: AST) {
   ast.insertExpression(createExpression)
   
   // EOF.
+}
+
+/**
+ * Run create expression.
+ * 
+ * @export
+ * @param {Expression} expression
+ */
+export function run (expression: Expression) {
+  // Get tagName.
+  const tagName = expression.arguments.shift()
+  if (tagName.type !== 'StringLiteral' || typeof tagName.value !== 'string') {
+    errorHandler.typeError('You must use a string as your tag name.')
+  }
+
+  // Check keyword as.
+  const asKeyword = expression.arguments.shift()
+  if (asKeyword.type !== 'keyword' || asKeyword.value !== 'as') {
+    errorHandler.syntaxError('"as" must be followed after "${tagName}" in "create" expression.')
+  }
+
+  // Get variable name.
+  const variable = expression.arguments.shift()
+  const value = document.createElement(<string> tagName.value)
+  VARIABLE_HASH[variable.value] = new Variable(variable.value, value)
 }
