@@ -1,17 +1,16 @@
 /**
  * Class: Variable.
  * 
- * @export
  * @class Variable
  */
 declare class Variable {
   /**
    * Name of this variable.
    * 
-   * @type {string}
+   * @type {string|number}
    * @memberOf Variable
    */
-  name: string
+  name: string | number
 
   /**
    * Value belongs to this variable.
@@ -24,10 +23,10 @@ declare class Variable {
   /**
    * Creates an instance of Variable.
    * 
-   * @param {string} name
+   * @param {string|number} name
    * @param {*} value
    * 
    * @memberOf Variable
    */
-  constructor (name: string, value: any)
+  constructor (name: string | number, value: any)
 }
