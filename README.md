@@ -4,6 +4,8 @@ A simple script language which is designed to control DOM element.
 
 Just for fun :)
 
+[Demo](https://lancercomet.github.io/document-script/demo/demo.html) is here.
+
 ## Usage
 ```ruby
 # Create a div element and name it as "myDiv".
