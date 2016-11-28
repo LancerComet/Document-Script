@@ -7,8 +7,10 @@
  */
 
 import { Keyword, isKeyword } from '../../parser'
-import { Expression, EXPRESSION_LIST } from '../'
+import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
+
+import { VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
@@ -60,6 +62,36 @@ const selectExpression = new Expression(EXP_NAME)
   // EOF.
 }
 
-export function run () {
-  
+/**
+ * Run select expression.
+ * 
+ * @export
+ * @param {Expression} expression
+ */
+export function run (expression: Expression) {
+  // Get selector.
+  const selector = expression.arguments.shift()
+  if (selector.type !== 'StringLiteral' || typeof selector.value !== 'string') {
+    errorHandler.typeError('You must use a string as your selector.')
+  }
+
+  // Select target elements.
+  var selectedElement: Element | null | NodeListOf<Element> = null
+  var _selected = document.querySelectorAll(<string> selector.value)
+  if (_selected.length === 1) {
+    selectedElement = _selected[0]
+  } else if (_selected.length > 1) {
+    selectedElement = _selected
+  }
+
+  // Check keyword as.
+  const asKeyword = expression.arguments.shift()
+  if (asKeyword.type !== 'keyword' || asKeyword.value !== 'as') {
+    errorHandler.syntaxError('"as" must be followed after "${tagName}" in "create" expression.')
+  }
+
+  // Set variable.
+  const variableName = expression.arguments.shift().value
+  const variableValue = selectedElement
+  VARIABLE_HASH[variableName] = new Variable(variableName, variableValue)
 }

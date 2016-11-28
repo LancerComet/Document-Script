@@ -27,7 +27,7 @@ const EXP_NAME = 'create'
  * @export
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
- * @param {AST} ast 
+ * @param {AST} ast
  */
 export function createExpression (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const createExpression = new Expression(EXP_NAME)
@@ -84,8 +84,8 @@ export function run (expression: Expression) {
     errorHandler.syntaxError('"as" must be followed after "${tagName}" in "create" expression.')
   }
 
-  // Get variable name.
-  const variable = expression.arguments.shift()
-  const value = document.createElement(<string> tagName.value)
-  VARIABLE_HASH[variable.value] = new Variable(variable.value, value)
+  // Set variable.
+  const variableName = expression.arguments.shift().value
+  const variableValue = document.createElement(<string> tagName.value)
+  VARIABLE_HASH[variableName] = new Variable(variableName, variableValue)
 }

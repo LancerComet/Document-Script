@@ -10,3 +10,5 @@ export function transformer (ast: AST) {
 }
 
 export { VARIABLE_HASH }
+
+(<any>window).VARIABLE_HASH = VARIABLE_HASH

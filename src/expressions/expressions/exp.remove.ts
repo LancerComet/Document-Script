@@ -7,8 +7,10 @@
  */
 
 import { Keyword, isKeyword } from '../../parser'
-import { Expression, EXPRESSION_LIST } from '../'
+import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
+
+import { VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
@@ -45,6 +47,23 @@ export function createExpression (currentToken: Token, tokens: Array<Token>, ast
   ast.insertExpression(removeExpression)
 }
 
-export function run () {
-  
+/**
+ * Run remove expression.
+ * 
+ * @export
+ * @param {Expression} expression
+ */
+export function run (expression: Expression) {
+  // Get variable name.
+  const variableName = expression.arguments.shift().value
+  const srcElement: HTMLElement = VARIABLE_HASH[variableName].value
+  if (srcElement === undefined) errorHandler.undefinedError(`${variableName} is undefined.`)
+  if (
+    typeof srcElement !== 'object' ||
+    (srcElement.nodeName === undefined && srcElement.nodeType === undefined)
+  ) errorHandler.typeError(`${variableName} isn't a HTML Element.`)
+
+  // Remove srcElement.
+  const parentElement = srcElement.parentElement
+  parentElement.removeChild(srcElement)
 }

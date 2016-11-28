@@ -28,6 +28,8 @@ exports.Variable = Variable;
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
+var parser_2 = require('../../parser');
+var transformer_1 = require('../../transformer');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'append';
 function createExpression(currentToken, tokens, ast) {
@@ -46,18 +48,37 @@ exports.createExpression = createExpression;
 function elementExec(elementArg, appendExpression, type) {
     if (!parser_1.isKeyword(elementArg.value) && _1.EXPRESSION_LIST.indexOf(elementArg.value) < 0) {
         appendExpression.insertArg(elementArg.type === 'number'
-            ? new NumberLiteral(elementArg.value)
-            : new StringLiteral(elementArg.value));
+            ? new parser_2.NumberLiteral(elementArg.value)
+            : new parser_2.StringLiteral(elementArg.value));
     }
     else {
         utils_1.errorHandler.typeError("You can't use a keyword or expression as the name of " + type + " element when calling \"append\".");
     }
 }
-function run() {
+function run(expression) {
+    var variableName = expression.arguments.shift().value;
+    var srcElement = transformer_1.VARIABLE_HASH[variableName].value;
+    if (srcElement === undefined)
+        utils_1.errorHandler.undefinedError(variableName + " is undefined.");
+    if (typeof srcElement !== 'object' ||
+        (srcElement.nodeName === undefined && srcElement.nodeType === undefined))
+        utils_1.errorHandler.typeError(variableName + " isn't a HTML Element.");
+    var toKeyword = expression.arguments.shift();
+    if (toKeyword.type !== 'keyword' || toKeyword.value !== 'to') {
+        utils_1.errorHandler.syntaxError('"to" must be followed after "${variableName}" in "append" expression.');
+    }
+    var targetVariable = expression.arguments.shift().value;
+    var targetElement = transformer_1.VARIABLE_HASH[targetVariable].value;
+    if (targetElement === undefined)
+        utils_1.errorHandler.undefinedError('${targetVariable} is undefined.');
+    if (typeof targetElement !== 'object' ||
+        (targetElement.nodeName === undefined && targetElement.nodeType === undefined))
+        utils_1.errorHandler.typeError(variableName + " isn't a HTML Element.");
+    targetElement.appendChild(srcElement);
 }
 exports.run = run;
 
-},{"../":9,"../../parser":13,"../../utils":18}],4:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../transformer":16,"../../utils":18}],4:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
@@ -96,9 +117,9 @@ function run(expression) {
     if (asKeyword.type !== 'keyword' || asKeyword.value !== 'as') {
         utils_1.errorHandler.syntaxError('"as" must be followed after "${tagName}" in "create" expression.');
     }
-    var variable = expression.arguments.shift();
-    var value = document.createElement(tagName.value);
-    transformer_1.VARIABLE_HASH[variable.value] = new _1.Variable(variable.value, value);
+    var variableName = expression.arguments.shift().value;
+    var variableValue = document.createElement(tagName.value);
+    transformer_1.VARIABLE_HASH[variableName] = new _1.Variable(variableName, variableValue);
 }
 exports.run = run;
 
@@ -140,6 +161,7 @@ exports.run = run;
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
+var transformer_1 = require('../../transformer');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'remove';
 function createExpression(currentToken, tokens, ast) {
@@ -156,15 +178,25 @@ function createExpression(currentToken, tokens, ast) {
     ast.insertExpression(removeExpression);
 }
 exports.createExpression = createExpression;
-function run() {
+function run(expression) {
+    var variableName = expression.arguments.shift().value;
+    var srcElement = transformer_1.VARIABLE_HASH[variableName].value;
+    if (srcElement === undefined)
+        utils_1.errorHandler.undefinedError(variableName + " is undefined.");
+    if (typeof srcElement !== 'object' ||
+        (srcElement.nodeName === undefined && srcElement.nodeType === undefined))
+        utils_1.errorHandler.typeError(variableName + " isn't a HTML Element.");
+    var parentElement = srcElement.parentElement;
+    parentElement.removeChild(srcElement);
 }
 exports.run = run;
 
-},{"../":9,"../../parser":13,"../../utils":18}],7:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../transformer":16,"../../utils":18}],7:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
+var transformer_1 = require('../../transformer');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'select';
 function createExpression(currentToken, tokens, ast) {
@@ -187,15 +219,35 @@ function createExpression(currentToken, tokens, ast) {
     ast.insertExpression(selectExpression);
 }
 exports.createExpression = createExpression;
-function run() {
+function run(expression) {
+    var selector = expression.arguments.shift();
+    if (selector.type !== 'StringLiteral' || typeof selector.value !== 'string') {
+        utils_1.errorHandler.typeError('You must use a string as your selector.');
+    }
+    var selectedElement = null;
+    var _selected = document.querySelectorAll(selector.value);
+    if (_selected.length === 1) {
+        selectedElement = _selected[0];
+    }
+    else if (_selected.length > 1) {
+        selectedElement = _selected;
+    }
+    var asKeyword = expression.arguments.shift();
+    if (asKeyword.type !== 'keyword' || asKeyword.value !== 'as') {
+        utils_1.errorHandler.syntaxError('"as" must be followed after "${tagName}" in "create" expression.');
+    }
+    var variableName = expression.arguments.shift().value;
+    var variableValue = selectedElement;
+    transformer_1.VARIABLE_HASH[variableName] = new _1.Variable(variableName, variableValue);
 }
 exports.run = run;
 
-},{"../":9,"../../parser":13,"../../utils":18}],8:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../transformer":16,"../../utils":18}],8:[function(require,module,exports){
 "use strict";
 var parser_1 = require('../../parser');
 var _1 = require('../');
 var parser_2 = require('../../parser');
+var transformer_1 = require('../../transformer');
 var utils_1 = require('../../utils');
 var EXP_NAME = 'style';
 function createExpression(currentToken, tokens, ast) {
@@ -218,11 +270,25 @@ function createExpression(currentToken, tokens, ast) {
     ast.insertExpression(styleExpression);
 }
 exports.createExpression = createExpression;
-function run() {
+function run(expression) {
+    var variableName = expression.arguments.shift().value;
+    var srcElement = transformer_1.VARIABLE_HASH[variableName].value;
+    if (srcElement === undefined)
+        utils_1.errorHandler.undefinedError(variableName + " is undefined.");
+    if (typeof srcElement !== 'object' ||
+        (srcElement.nodeName === undefined && srcElement.nodeType === undefined))
+        utils_1.errorHandler.typeError(variableName + " isn't a HTML Element.");
+    var cssProperityName = expression.arguments.shift();
+    var _cssPropVal = cssProperityName.value;
+    if (cssProperityName.type !== 'StringLiteral' || typeof _cssPropVal !== 'string') {
+        utils_1.errorHandler.typeError("CSS properity is string-typed. \"" + _cssPropVal + "\" is not a string.");
+    }
+    var cssProperityValue = expression.arguments.shift().value;
+    srcElement.style[_cssPropVal] = cssProperityValue;
 }
 exports.run = run;
 
-},{"../":9,"../../parser":13,"../../utils":18}],9:[function(require,module,exports){
+},{"../":9,"../../parser":13,"../../transformer":16,"../../utils":18}],9:[function(require,module,exports){
 "use strict";
 var append = require('./expressions/exp.append');
 exports.append = append;
@@ -407,6 +473,7 @@ function transformer(ast) {
     });
 }
 exports.transformer = transformer;
+window.VARIABLE_HASH = tf_variable_hash_1.VARIABLE_HASH;
 
 },{"../expressions":9,"./tf.variable-hash":17}],17:[function(require,module,exports){
 "use strict";
@@ -431,6 +498,10 @@ function syntaxError(message) {
     throwError('[Syntax Error] ' + message);
 }
 exports.syntaxError = syntaxError;
+function undefinedError(message) {
+    throwError('[Undefined] ' + message);
+}
+exports.undefinedError = undefinedError;
 
 },{}],20:[function(require,module,exports){
 "use strict";

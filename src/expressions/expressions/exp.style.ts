@@ -7,8 +7,10 @@
  */
 
 import { Keyword, isKeyword } from '../../parser'
-import { Expression, EXPRESSION_LIST } from '../'
+import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
+
+import { VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
@@ -56,6 +58,30 @@ export function createExpression (currentToken: Token, tokens: Array<Token>, ast
   // EOF.
 }
 
-export function run () {
-  
+/**
+ * Run style expression.
+ * 
+ * @export
+ * @param {Expression} expression
+ */
+export function run (expression: Expression) {
+  // Get variable name.
+  const variableName = expression.arguments.shift().value
+  const srcElement: HTMLElement = VARIABLE_HASH[variableName].value
+  if (srcElement === undefined) errorHandler.undefinedError(`${variableName} is undefined.`)
+  if (
+    typeof srcElement !== 'object' ||
+    (srcElement.nodeName === undefined && srcElement.nodeType === undefined)
+  ) errorHandler.typeError(`${variableName} isn't a HTML Element.`)
+
+  // Get css style properity.
+  const cssProperityName = expression.arguments.shift()
+  const _cssPropVal = cssProperityName.value
+  if (cssProperityName.type !== 'StringLiteral' || typeof _cssPropVal !== 'string') {
+    errorHandler.typeError(`CSS properity is string-typed. "${_cssPropVal}" is not a string.`) 
+  }
+
+  // Get properity value.
+  const cssProperityValue = expression.arguments.shift().value
+  srcElement.style[_cssPropVal] = cssProperityValue
 }

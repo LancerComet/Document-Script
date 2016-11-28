@@ -9,3 +9,7 @@ export function typeError (message: string) {
 export function syntaxError (message: string) {
   throwError('[Syntax Error] ' + message)
 }
+
+export function undefinedError (message: string) {
+  throwError('[Undefined] ' + message)
+}

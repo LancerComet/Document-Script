@@ -7,7 +7,7 @@
  */
 
 import { Keyword, isKeyword } from '../../parser'
-import { Expression, EXPRESSION_LIST } from '../'
+import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral, ExpressionLiteral } from '../../parser'
 
 import { errorHandler } from '../../utils'

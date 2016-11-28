@@ -7,7 +7,10 @@
  */
 
 import { Keyword, isKeyword } from '../../parser'
-import { Expression, EXPRESSION_LIST } from '../'
+import { Expression, EXPRESSION_LIST, Variable } from '../'
+import { NumberLiteral, StringLiteral } from '../../parser'
+
+import { VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
@@ -70,6 +73,37 @@ function elementExec (elementArg: Token, appendExpression: Expression, type: str
   }
 }
 
-export function run () {
+/**
+ * Run append expression.
+ * 
+ * @export
+ * @param {Expression} expression
+ */
+export function run (expression: Expression) {
+  // Get variable name.
+  const variableName = expression.arguments.shift().value
+  const srcElement: HTMLElement = VARIABLE_HASH[variableName].value
+  if (srcElement === undefined) errorHandler.undefinedError(`${variableName} is undefined.`)
+  if (
+    typeof srcElement !== 'object' ||
+    (srcElement.nodeName === undefined && srcElement.nodeType === undefined)
+  ) errorHandler.typeError(`${variableName} isn't a HTML Element.`)
 
+  // Check keyword.
+  const toKeyword = expression.arguments.shift()
+  if (toKeyword.type !== 'keyword' || toKeyword.value !== 'to') {
+      errorHandler.syntaxError('"to" must be followed after "${variableName}" in "append" expression.')
+  }
+
+  // Target element variable.
+  const targetVariable = expression.arguments.shift().value
+  const targetElement: HTMLElement = VARIABLE_HASH[targetVariable].value
+  if (targetElement === undefined) errorHandler.undefinedError('${targetVariable} is undefined.')
+  if (
+    typeof targetElement !== 'object' ||
+    (targetElement.nodeName === undefined && targetElement.nodeType === undefined)
+  ) errorHandler.typeError(`${variableName} isn't a HTML Element.`)
+
+  // Append to target.
+  targetElement.appendChild(srcElement)
 }

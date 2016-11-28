@@ -9,7 +9,11 @@
       const code =
       `
         create div as myDiv
-        select document.body as body
+        style myDiv width 200px
+        style myDiv height 300px
+        style myDiv backgroundColor red
+        select body as body
+        append myDiv to body
       `
       const tokens = tokenizer(code)
       console.log('tokens: ', tokens)
