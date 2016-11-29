@@ -10,7 +10,7 @@ import { Keyword, isKeyword } from '../../parser'
 import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
 
-import { VARIABLE_HASH } from '../../transformer'
+import { VARIABLE_HASH, TEMP_VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
@@ -65,5 +65,18 @@ export function run (expression: Expression) {
 
   // Remove srcElement.
   const parentElement = srcElement.parentElement
-  parentElement.removeChild(srcElement)
+
+  // Do remove function.
+  expFunc(parentElement, srcElement)
+}
+
+/**
+ * Function of remove expression.
+ * 
+ * @export
+ * @param {Element} parentElement
+ * @param {Element} targetElement
+ */
+export function expFunc (parentElement: Element, targetElement: Element) {
+  parentElement.removeChild(targetElement)  
 }

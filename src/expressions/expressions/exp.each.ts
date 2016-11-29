@@ -8,9 +8,12 @@
 
 import { Keyword, isKeyword } from '../../parser'
 import { Expression, EXPRESSION_LIST, Variable } from '../'
+import * as expressions from '../'
 import { NumberLiteral, StringLiteral, ExpressionLiteral } from '../../parser'
 
-import { errorHandler } from '../../utils'
+import { VARIABLE_HASH, TEMP_VARIABLE_HASH } from '../../transformer'
+
+import { errorHandler, uidGen } from '../../utils'
 
 const EXP_NAME = 'each'
 
@@ -26,7 +29,7 @@ const EXP_NAME = 'each'
  * @param {Token} currentToken
  * @param {Array<Token>} tokens
  */
-export function createExpression (currentToken: Token, tokens: Array<Token>) {
+export function createExpression (currentToken: Token, tokens: Array<Token>, ast: AST) {
   const eachExpression = new Expression(EXP_NAME)
 
   // Let's deal with the first arg.
@@ -59,8 +62,48 @@ export function createExpression (currentToken: Token, tokens: Array<Token>) {
     arg.type === 'number' ? new NumberLiteral(arg.value) : new StringLiteral(arg.value)
   ))
 
+  ast.insertExpression(eachExpression)
+
 }
 
-export function run () {
+/**
+ * Run each expression.
+ * 
+ * @export
+ * @param {Expression} expression
+ */
+export function run (expression: Expression) {
+  // Get variable name.
+  const variableName = expression.arguments.shift().value
+  const srcElements: NodeList = VARIABLE_HASH[variableName].value
+  if (srcElements === undefined) errorHandler.undefinedError(`${variableName} is undefined.`)
+  if (!srcElements.length) return
+
+  // Get expression.
+  const expressionArg = expression.arguments.shift()
+  if (!expressionArg.value) return
+  if (expressionArg.type !== 'expression') {
+    errorHandler.typeError('An expression must be followed after each in "each" expression.')    
+  }
   
+  // Do expression command.
+  const nodes = Array.prototype.slice.call(srcElements)
+  nodes.forEach(node => {
+    // eg:
+    // append myDiv to body
+    // style myDiv backgroundColor #fff
+    const _expression = new Expression(<string> expressionArg.value)
+
+    // First argument: Single element's variable.
+    const _tempVarName = variableName + '_' + uidGen()
+    const _tempVar = new Variable(_tempVarName, node)
+    VARIABLE_HASH[_tempVarName] = _tempVar
+    _expression.insertArg(new StringLiteral(_tempVarName))
+
+    // Insert rest of areguments.
+    expression.arguments.forEach(arg => _expression.insertArg(arg))
+
+    // Run expression.
+    expressions[expressionArg.value] && expressions[expressionArg.value].run(_expression)
+  })
 }

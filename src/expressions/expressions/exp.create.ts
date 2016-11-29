@@ -10,7 +10,7 @@ import { Keyword, isKeyword } from '../../parser'
 import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
 
-import { VARIABLE_HASH } from '../../transformer'
+import { VARIABLE_HASH, TEMP_VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
@@ -87,5 +87,18 @@ export function run (expression: Expression) {
   // Set variable.
   const variableName = expression.arguments.shift().value
   const variableValue = document.createElement(<string> tagName.value)
-  VARIABLE_HASH[variableName] = new Variable(variableName, variableValue)
+
+  // Create new variable.
+  expFunc(variableName, new Variable(variableName, variableValue))
+}
+
+/**
+ * Function of create expression.
+ * 
+ * @export
+ * @param {(string | number)} variableName
+ * @param {Variable} newVarialbe
+ */
+export function expFunc (variableName: string | number, newVarialbe: Variable) {
+  VARIABLE_HASH[variableName] = newVarialbe  
 }

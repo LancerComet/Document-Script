@@ -1,6 +1,6 @@
 /// <reference path="../index.d.ts" />
 
-import { VARIABLE_HASH } from './tf.variable-hash'
+import { VARIABLE_HASH, TEMP_VARIABLE_HASH } from './tf.variable-hash'
 import * as expressions from '../expressions'
 
 export function transformer (ast: AST | false) {
@@ -10,4 +10,4 @@ export function transformer (ast: AST | false) {
   })
 }
 
-export { VARIABLE_HASH }
+export { VARIABLE_HASH, TEMP_VARIABLE_HASH }

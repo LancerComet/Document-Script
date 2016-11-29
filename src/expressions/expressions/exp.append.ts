@@ -10,7 +10,7 @@ import { Keyword, isKeyword } from '../../parser'
 import { Expression, EXPRESSION_LIST, Variable } from '../'
 import { NumberLiteral, StringLiteral } from '../../parser'
 
-import { VARIABLE_HASH } from '../../transformer'
+import { VARIABLE_HASH, TEMP_VARIABLE_HASH } from '../../transformer'
 
 import { errorHandler } from '../../utils'
 
@@ -105,5 +105,16 @@ export function run (expression: Expression) {
   ) errorHandler.typeError(`${variableName} isn't a HTML Element.`)
 
   // Append to target.
-  targetElement.appendChild(srcElement)
+  expFunc(srcElement, targetElement)
+}
+
+/**
+ * Function of append expression.
+ * 
+ * @export
+ * @param {Element} srcElement
+ * @param {Element} targetElement
+ */
+export function expFunc (srcElement: Element, targetElement: Element) {
+  targetElement.appendChild(srcElement)  
 }
