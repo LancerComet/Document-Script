@@ -21,6 +21,10 @@ select body as body
 
 # Append myDiv to body.
 append myDiv to body
+
+# Select all paragraph elements, and make text color cadetblue.
+select p as paragraphs
+each paragraphs style color cadetblue
 ```
 
 ## License.
