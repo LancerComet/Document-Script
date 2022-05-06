@@ -1,10 +1,10 @@
 # Document Script.
 
-A simple script language which is designed to control DOM element.
+A simple script language that is designed to control DOM elements.
 
 Just for fun :)
 
-[Demo](https://lancercomet.github.io/document-script/demo/demo.html) is here.
+[Demo](https://lancercomet.github.io/Document-Script) is here.
 
 ## Usage
 ```ruby
@@ -28,6 +28,4 @@ each paragraphs style color cadetblue
 ```
 
 ## License.
-MIT.
-
-© LancerComet.
+MIT
