@@ -4,7 +4,7 @@ A simple script language that is designed to control DOM elements.
 
 Just for fun :)
 
-[Demo](https://lancercomet.github.io/Document-Script) is here.
+[Demo](https://lancercomet.github.io/Document-Script/demo/demo.html) is here.
 
 ## Usage
 ```ruby
